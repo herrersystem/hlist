@@ -25,7 +25,14 @@ def conversionHexIP(adresse):
 	
 	
 def conversionGraphMac(adresse):
-	return adresse[:2]+':'+adresse[2:4]+':'+adresse[4:6]+':'+adresse[6:8]+':'+adresse[8:10]+':'+adresse[10:12]
+	return (
+		adresse[:2]+':'+
+		adresse[2:4]+':'+
+		adresse[4:6]+':'+
+		adresse[6:8]+':'+
+		adresse[8:10]+':'+
+		adresse[10:12]
+	)
 
 
 def conversionHexMac(adresse):
@@ -125,6 +132,7 @@ def envoiRequete(interface, liste, maMac, monIp):
 		s.bind((interface, socket.SOCK_RAW))
 	
 		headerEther=ethernet(maMac, 'ff:ff:ff:ff:ff:ff')
+		
 		for cible in liste:
 			try:
 				headerArp=arp(maMac, monIp, cible)
@@ -139,8 +147,8 @@ def envoiRequete(interface, liste, maMac, monIp):
 					ip=rep.decode()[56:64]
 					
 					if proto == "0806" and op == '2' and ip == conversionHexIP(cible): 
-						print("> [{}] {} ({})".format(
-							socket.gethostbyaddr(cible)[0], cible, conversionGraphMac(mac))
+						print("> {} ({})".format(
+							cible, conversionGraphMac(mac))
 						)
 						
 			except socket.timeout: 
